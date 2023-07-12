@@ -1,5 +1,6 @@
 const Hapi = require('@hapi/hapi');
 const albums = require('./api/albums');
+const AlbumsValidator = require('./validator/albums');
 
 const init = async () => {
   const server = Hapi.server({
@@ -14,6 +15,9 @@ const init = async () => {
 
   await server.register({
     plugin: albums,
+    options: {
+      validator: AlbumsValidator,
+    },
   });
 
   await server.start();
