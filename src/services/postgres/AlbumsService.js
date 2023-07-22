@@ -1,8 +1,6 @@
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
-// eslint-disable-next-line import/no-unresolved, import/extensions
-const { mapDBToModelAlbums } = require('../../utils');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
 class AlbumsService {
@@ -11,7 +9,7 @@ class AlbumsService {
   }
 
   async addAlbum({ name, year }) {
-    const id = nanoid(16);
+    const id = `album-${nanoid(16)}`;
 
     const query = {
       text: 'INSERT INTO albums VALUES($1, $2, $3) RETURNING id',
@@ -23,6 +21,8 @@ class AlbumsService {
     if (!result.rows[0].id) {
       throw new InvariantError('Album gagal ditambahkan');
     }
+
+    console.log(result);
     return result.rows[0].id;
   }
 
@@ -33,24 +33,30 @@ class AlbumsService {
     };
 
     const result = await this._pool.query(query);
+    // const resultSong = await this._pool.query(querySong);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError('Album tidak ditemukan');
     }
 
-    return result.rows.map(mapDBToModelAlbums)[0];
+    return {
+      id: result.rows[0].id,
+      name: result.rows[0].name,
+      year: result.rows[0].year,
+      // songs: resultSong.rows,
+    };
   }
 
   async editAlbumById(id, { name, year }) {
     const query = {
-      text: 'UPDATE albums SET name = $1, year = $2, WHERE id = $3 RETURNING id',
+      text: 'UPDATE albums SET name = $1, year = $2 WHERE id = $3 RETURNING id',
       values: [name, year, id],
     };
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
-      throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan');
+    if (!result.rowCount) {
+      throw new NotFoundError('Album tidak ditemukan');
     }
   }
 
@@ -62,8 +68,8 @@ class AlbumsService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
-      throw new NotFoundError('Album gagal dihapus. Id tidak ditemukan');
+    if (!result.rowCount) {
+      throw new NotFoundError('Album tidak ditemukan');
     }
   }
 }
