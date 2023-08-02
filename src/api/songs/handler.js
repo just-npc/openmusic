@@ -8,24 +8,6 @@ class SongsHandler {
     autoBind(this);
   }
 
-  // TODO : jan lupa perbaiki posthandler ama get handler nya
-  // async postSongHandler(request, h) {
-  //   this._validator.validateSongPayload(request.payload);
-
-  //   const songsId = await this._service.addSong(request.payload);
-
-  //   const response = h.response({
-  //     status: 'success',
-  //     message: 'Lagu berhasil ditambahkan',
-  //     data: {
-  //       songsId,
-  //     },
-  //   });
-  //   response.code(201);
-  //   console.log(response);
-  //   return response;
-  // }
-
   async postSongHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
 
