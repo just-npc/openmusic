@@ -122,23 +122,6 @@ class PlaylistsHandler {
       message: 'Playlist Song berhasil dihapus!',
     };
   }
-
-  // async getPlaylistActivitiesHandler(request) {
-  //   const { id: playlistId } = request.params;
-  //   const { userId } = request.auth.credentials;
-
-  //   await this._service.verifyPlaylistAccess(playlistId, userId);
-
-  //   const activities = await this._service.getPlaylistActivity(playlistId);
-
-  //   return {
-  //     status: 'success',
-  //     data: {
-  //       playlistId,
-  //       activities,
-  //     },
-  //   };
-  // }
 }
 
 module.exports = PlaylistsHandler;

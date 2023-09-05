@@ -9,7 +9,6 @@ class PlaylistsService {
   constructor(collaborationsService) {
     this._pool = new Pool();
     this._collaborationsService = collaborationsService;
-    // this._cacheService = cacheService;
   }
 
   async addPlaylist({ name, owner }) {
@@ -118,30 +117,6 @@ class PlaylistsService {
       throw new InvariantError('Song gagal dihapus dari playlist. Id tidak ditemukan!');
     }
   }
-
-  // async getPlaylistActivity(playlistId) {
-  //   const query = {
-  //     text: `SELECT u.username, s.title, psa.action, psa.time FROM playlists_activities psa
-  //     LEFT JOIN playlists p ON psa.playlist_id = p.id
-  //     LEFT JOIN songs s ON psa.song_id = s.id
-  //     LEFT JOIN users u ON psa.user_id = u.id
-  //     WHERE p.id = $1`,
-  //     values: [playlistId],
-  //   };
-
-  //   const result = await this._pool.query(query);
-
-  //   if (!result.rowCount) {
-  //     throw new NotFoundError('Playlist Activity tidak ditemukan!');
-  //   }
-
-  //   await this._cacheService.set(
-  //     `playlist_activities:${playlistId}`,
-  //     JSON.stringify(result.rows),
-  //   );
-
-  //   return result.rows;
-  // }
 
   async verifyPlaylistOwner(id, owner) {
     const query = {
